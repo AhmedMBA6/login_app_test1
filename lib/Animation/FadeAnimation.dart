@@ -1,16 +1,31 @@
-// import 'package:flutter/material.dart';
-// import 'package:simple_animations/simple_animations.dart';
-// class Fadeanimation extends StatelessWidget {
-//   final double delay;
-//   final Widget child;
-//   const Fadeanimation({super.key, required this.delay, required this.child});
-  
+import 'package:flutter/material.dart';
+import 'package:simple_animations/simple_animations.dart';
 
-//   @override
-//   Widget build(BuildContext context) {
-//     final tween = MultiTrackTween(
-      
-//     );
-//     return AnimatedBuilder(animation: , builder: builder);
-//   }
-// }
+class FadeAnimation extends StatelessWidget {
+  final double delay;
+  final Widget child;
+  const FadeAnimation({super.key, required this.delay, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    final tween = MovieTween()
+      ..tween('opacity', Tween(begin: 0.0, end: 1.0),
+              duration: const Duration(milliseconds: 500))
+          .thenTween('translatey', Tween(begin: -30.0, end: 0.0),
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeInOut);
+    return PlayAnimationBuilder<Movie>(
+      delay: Duration(milliseconds: (500 * delay).round()),
+      duration: tween.duration,
+      tween: tween,
+      builder: (context, value, child) => Opacity(
+        opacity: value.get("opacity"),
+        child: Transform.translate(
+          offset: Offset(0, value.get("translatey")),
+          child: child,
+        ),
+      ),
+      child: child,
+    );
+  }
+}
